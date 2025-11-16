@@ -38,4 +38,4 @@ To keep it running 24/7 on the Free Tier:
 3.  Interval: Every 5 minutes.
 
 ---
-*Forged by Sanjeeb.*
+*Forged by BlackHeart.*
