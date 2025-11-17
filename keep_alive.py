@@ -1,8 +1,9 @@
-from flask import Flask  # <--- THIS LINE WAS MISSING OR BROKEN
+from flask import Flask
 from threading import Thread
 import logging
 
-# Disable Flask internal logging to prevent console spam
+# 1. Disable Flask internal logging. 
+# THIS LINE FIXES THE "OUTPUT TOO LARGE" ERROR.
 log = logging.getLogger('werkzeug')
 log.setLevel(logging.ERROR)
 
@@ -10,6 +11,7 @@ app = Flask('')
 
 @app.route('/')
 def home():
+    # 2. Return a tiny string to satisfy Cronjobs
     return "Alive."
 
 def run():
