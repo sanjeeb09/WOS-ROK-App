@@ -1,9 +1,9 @@
 from flask import Flask
 from threading import Thread
 import logging
+import os  # <--- THIS IS NEW AND IMPORTANT
 
-# 1. Disable Flask internal logging. 
-# THIS LINE FIXES THE "OUTPUT TOO LARGE" ERROR.
+# Silence the logs
 log = logging.getLogger('werkzeug')
 log.setLevel(logging.ERROR)
 
@@ -11,11 +11,12 @@ app = Flask('')
 
 @app.route('/')
 def home():
-    # 2. Return a tiny string to satisfy Cronjobs
     return "Alive."
 
 def run():
-    app.run(host='0.0.0.0', port=8080)
+    # Get the PORT from Render automatically, or use 8080 if testing locally
+    port = int(os.environ.get("PORT", 8080))
+    app.run(host='0.0.0.0', port=port)
 
 def keep_alive():
     t = Thread(target=run)
