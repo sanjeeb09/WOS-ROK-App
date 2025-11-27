@@ -1029,34 +1029,47 @@ async def on_message(message):
 # ==============================================================================
 @bot_wos.event
 async def on_ready():
-    sys.stdout.reconfigure(encoding='utf-8')
-    print('❄️ WOS Bot Online')
+    # REMOVED: sys.stdout.reconfigure (It's already done in main)
+    print('❄️ WOS Bot Online', flush=True) # Added flush=True
     await bot_wos.change_presence(activity=discord.Activity(type=discord.ActivityType.watching, name="Bear Timers 🐻"))
     bot_wos.add_view(TicketLauncher("WOS"))
     await bot_wos.add_cog(WOSCommands(bot_wos))
-    try: synced = await bot_wos.tree.sync(); print(f"❄️ Synced {len(synced)} WOS Commands")
-    except Exception as e: print(e)
-    bear_trap_loop.start()
+    try: 
+        synced = await bot_wos.tree.sync()
+        print(f"❄️ Synced {len(synced)} WOS Commands", flush=True)
+    except Exception as e: 
+        print(e, flush=True)
+    
+    if not bear_trap_loop.is_running():
+        bear_trap_loop.start()
 
 @bot_rok.event
 async def on_ready():
-    sys.stdout.reconfigure(encoding='utf-8')
-    print('👑 ROK Bot Online')
+    # REMOVED: sys.stdout.reconfigure
+    print('👑 ROK Bot Online', flush=True) # Added flush=True
     await bot_rok.change_presence(activity=discord.Activity(type=discord.ActivityType.watching, name="Kingdom Chat 👑"))
     bot_rok.add_view(TicketLauncher("ROK"))
     await bot_rok.add_cog(ROKCommands(bot_rok))
-    try: synced = await bot_rok.tree.sync(); print(f"👑 Synced {len(synced)} ROK Commands")
-    except Exception as e: print(e)
+    try: 
+        synced = await bot_rok.tree.sync()
+        print(f"👑 Synced {len(synced)} ROK Commands", flush=True)
+    except Exception as e: 
+        print(e, flush=True)
 
 async def main():
+    # Keep this ONE line here. It covers everything.
     sys.stdout.reconfigure(encoding='utf-8')
-    await asyncio.gather(bot_wos.start(TOKEN_WOS), bot_rok.start(TOKEN_ROK))
+    
+    # Slight delay to ensure logs don't overlap perfectly
+    await asyncio.gather(
+        bot_wos.start(TOKEN_WOS), 
+        bot_rok.start(TOKEN_ROK)
+    )
 
 if __name__ == "__main__":
     keep_alive()
     try: 
         asyncio.run(main())
     except KeyboardInterrupt:
-        # Force kill the process immediately
-        print("🛑 Force stopping...")
+        print("🛑 Force stopping...", flush=True)
         os._exit(0)
