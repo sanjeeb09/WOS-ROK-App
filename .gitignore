@@ -1,5 +1,18 @@
+# Security: Never upload API keys
 .env
+
+# Python: Virtual Environments (Heavy and OS-specific)
+venv/
+.venv/
+env/
+
+# Python: Compiled byte code (Junk)
 __pycache__/
 *.pyc
-venv/
+
+# Database: Local DB (Render wipes this anyway on free tier)
+alliance.db
+
+# OS System Files
 .DS_Store
+Thumbs.db
