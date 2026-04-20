@@ -1058,14 +1058,22 @@ async def on_ready():
 
 async def start_bot(bot, token, delay=0):
     await asyncio.sleep(delay)
-    await bot.start(token)
+
+    while True:
+        try:
+            print(f"Starting bot after {delay}s delay...")
+            await bot.start(token)
+        except Exception as e:
+            print(f"❌ Login failed: {e}")
+            print("🔁 Retrying in 60 seconds...")
+            await asyncio.sleep(60)
 
 async def main():
     sys.stdout.reconfigure(encoding='utf-8')
 
     await asyncio.gather(
         start_bot(bot_wos, TOKEN_WOS, 0),
-        start_bot(bot_rok, TOKEN_ROK, 10)  # 10 sec delay to avoid rate limit
+        start_bot(bot_rok, TOKEN_ROK, 30)  # 30 sec delay to avoid rate limit
     )
 
 if __name__ == "__main__":
